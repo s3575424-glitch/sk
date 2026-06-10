@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Simulation</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Consolas", "Courier New", monospace;
+    }
+
+    body {
+        background: #000;
+        overflow: hidden;
+        height: 100vh;
+        color: #00ff41;
+    }
+
+    /* Matrix-style background */
+    canvas {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+    }
+
+    .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.75);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+    }
+
+    .popup {
+        width: 700px;
+        max-width: 95%;
+        background: #050505;
+        border: 2px solid #00ff41;
+        border-radius: 12px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 0 40px #00ff41;
+        animation: pulse 2s infinite;
+    }
+
+    h1 {
+        font-size: 4rem;
+        color: #ff2e2e;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        text-shadow: 0 0 20px #ff2e2e;
+    }
+
+    .subtext {
+        font-size: 1.2rem;
+        margin-bottom: 25px;
+        color: #00ff41;
+    }
+
+    .warning {
+        color: #ffffff;
+        opacity: 0.85;
+        line-height: 1.7;
+        margin-bottom: 30px;
+    }
+
+    button {
+        background: #00ff41;
+        color: #000;
+        border: none;
+        padding: 14px 32px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 6px;
+    }
+
+    button:hover {
+        background: #00cc33;
+    }
+
+    @keyframes pulse {
+        0% { box-shadow: 0 0 20px #00ff41; }
+        50% { box-shadow: 0 0 50px #00ff41; }
+        100% { box-shadow: 0 0 20px #00ff41; }
+    }
+</style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="overlay" id="popup">
+    <div class="popup">
+        <h1>YOU ARE HACKED</h1>
+
+        <div class="subtext">
+            CYBERSECURITY DEMONSTRATION SIMULATION
+        </div>
+
+        <div class="warning">
+            This page is a visual simulation for cybersecurity awareness,
+            training, demonstrations, or presentations. No actual hacking
+            has occurred and no data has been accessed.
+        </div>
+
+        <button onclick="document.getElementById('popup').style.display='none'">
+            CLOSE
+        </button>
+    </div>
+</div>
+
+<script>
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const chars = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&@";
+const fontSize = 16;
+const columns = canvas.width / fontSize;
+
+const drops = [];
+for (let i = 0; i < columns; i++) {
+    drops[i] = 1;
+}
+
+function draw() {
+    ctx.fillStyle = "rgba(0,0,0,0.08)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#00ff41";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+        }
+
+        drops[i]++;
+    }
+}
+
+setInterval(draw, 35);
+
+window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+</script>
+
+</body>
+</html>
